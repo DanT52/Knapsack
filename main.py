@@ -15,10 +15,34 @@ def knapsack(items, max_weight):
 
     # make a dp array
     dp = [[0] * (max_weight + 1) for _ in range(len(items) + 1)]
-
-    take :
     
-    skip :
+
+    # take :
+    #     i + 1
+    #     j - item weight
+    
+
+    # skip :
+    #     i + 1
+    
+    # so first loop though i (current i depends on i + 1)
+
+    # then loop though j (j depends on preiovus j values)
+
+    # so it be like
+
+    for i in range(len(items) - 1, -1, -1):
+        for j in range(max_weight+1):
+
+            take = 0
+            if j - items[i].weight >= 0:
+                take = items[i].value + dp[i+1][j-items[i].weight]
+            skip = dp[i+1][j]
+            dp[i][j] = max(take, skip)
+
+    print(dp)
+    return dp[len(items)][max_weight]
+
 
 
 
