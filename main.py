@@ -16,13 +16,28 @@ def knapsack(items, max_weight):
     #iterative
 
     # make a dp array
-    dp1 = [0] * (max_weight + 1)
+
+    #now lets make dp also store the curret items we are taking
+    # and their current value
+
+    #so each dp entry will be like
+    # [set(items taking), weight, value]
+
+    dp1 = [(set(), 0, 0) for _ in range(max_weight + 1)]
 
     for i in range(len(items) - 1, -1, -1):
         for j in range(max_weight, 0, -1):
-            take = items[i].value + dp1[j-items[i].weight] if j - items[i].weight >= 0 else 0
-            dp1[j] = max(take, dp1[j])
+
+            take = 0
+            if j - items[i].weight >= 0:
+                take = items[i].value + dp1[j-items[i].weight][1]
+
+            skip = dp1[j][1]
+            if take > skip:
+                dp1[j] = (dp1[j-items[i].weight][0] | {i}, take, dp1[j-items[i].weight][2] + items[i].weight)
+
     return dp1[max_weight]
+
 
 
     # recursive version only return the max value    
@@ -59,7 +74,15 @@ if __name__ == "__main__":
             items.append(Item(name, int(weight), int(value)))
     except EOFError:
         pass
+ 
 
-    print(knapsack(items, max_weight))
+    used, value, weight = knapsack(items, max_weight)
+ 
+
+    for i in used:
+        print(f"{items[i].name}, {items[i].weight}, {items[i].value}")
+
+    print("final weight: " + str(weight))
+    print("final value: " + str(value))
 
     
