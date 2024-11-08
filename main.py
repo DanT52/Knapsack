@@ -13,54 +13,35 @@ class Item:
 
 def knapsack(items, max_weight):
 
+    #iterative
+
     # make a dp array
     dp = [[0] * (max_weight + 1) for _ in range(len(items) + 1)]
-    
 
-    # take :
-    #     i + 1
-    #     j - item weight
-    
-
-    # skip :
-    #     i + 1
-    
-    # so first loop though i (current i depends on i + 1)
-
-    # then loop though j (j depends on preiovus j values)
-
-    # so it be like
+    dp1 = [0] * (max_weight + 1)
 
     for i in range(len(items) - 1, -1, -1):
-        for j in range(max_weight+1):
-
-            take = 0
-            if j - items[i].weight >= 0:
-                take = items[i].value + dp[i+1][j-items[i].weight]
-            skip = dp[i+1][j]
-            dp[i][j] = max(take, skip)
-
-    print(dp)
-    return dp[len(items)][max_weight]
+        for j in range(max_weight, 0, -1):
+            take = items[i].value + dp1[j-items[i].weight] if j - items[i].weight >= 0 else 0
+            dp1[j] = max(take, dp1[j])
+    return dp1[max_weight]
 
 
+    # recursive version only return the max value    
+    # @lru_cache(None)
+    # def maxval_startingwith_notExcced(i, j):
+    #     #base case
+    #     if i >= len(items) or j <= 0:
+    #         return 0 
+    #     # only take if we can
+    #     take = 0
+    #     if j - items[i].weight >= 0:
+    #         take = items[i].value + maxval_startingwith_notExcced(i+1, j-items[i].weight)
 
+    #     skip = maxval_startingwith_notExcced(i+1,j)
+    #     return max(take, skip)
 
-
-    @lru_cache(None)
-    def maxval_startingwith_notExcced(i, j):
-        #base case
-        if i >= len(items) or j <= 0:
-            return 0 
-        # only take if we can
-        take = 0
-        if j - items[i].weight >= 0:
-            take = items[i].value + maxval_startingwith_notExcced(i+1, j-items[i].weight)
-
-        skip = maxval_startingwith_notExcced(i+1,j)
-        return max(take, skip)
-
-    return maxval_startingwith_notExcced(0, max_weight)
+    # return maxval_startingwith_notExcced(0, max_weight)
 
 
 
