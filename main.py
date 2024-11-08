@@ -1,4 +1,4 @@
-from functools import lru_cache
+# from functools import lru_cache
 
 class Item:
     def __init__(self, name, weight, value):
@@ -36,6 +36,7 @@ def knapsack(items, max_weight):
             if take > skip:
                 dp1[j] = (dp1[j-items[i].weight][0] | {i}, take, dp1[j-items[i].weight][2] + items[i].weight)
 
+    
     return dp1[max_weight]
 
 
@@ -56,11 +57,6 @@ def knapsack(items, max_weight):
 
     # return maxval_startingwith_notExcced(0, max_weight)
 
-
-
-
-
-
 if __name__ == "__main__":
     max_weight = int(input())
 
@@ -79,10 +75,25 @@ if __name__ == "__main__":
     used, value, weight = knapsack(items, max_weight)
  
 
+    # Create a dictionary to count the occurrences of each item
+    item_counts = {}
     for i in used:
-        print(f"{items[i].name}, {items[i].weight}, {items[i].value}")
+        item_key = (items[i].name, items[i].weight, items[i].value)
+        if item_key in item_counts:
+            item_counts[item_key] += 1
+        else:
+            item_counts[item_key] = 1
+    
+    # Create a list to store the items in the order they appear in the input
+    ordered_items = []
+    for item in items:
+        item_key = (item.name, item.weight, item.value)
+        if item_key in item_counts and item_counts[item_key] > 0:
+            ordered_items.append(item)
+            item_counts[item_key] -= 1
+    
+    for item in ordered_items:
+        print(f"{item.name}, {item.weight}, {item.value}")
 
     print("final weight: " + str(weight))
     print("final value: " + str(value))
-
-    
