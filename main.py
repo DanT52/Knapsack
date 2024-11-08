@@ -16,8 +16,6 @@ def knapsack(items, max_weight):
     #iterative
 
     # make a dp array
-    dp = [[0] * (max_weight + 1) for _ in range(len(items) + 1)]
-
     dp1 = [0] * (max_weight + 1)
 
     for i in range(len(items) - 1, -1, -1):
